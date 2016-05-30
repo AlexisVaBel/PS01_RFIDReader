@@ -1,0 +1,16 @@
+syntax: glob
+
+bin/*
+log/*
+jar/core/**.*
+jar/lib/**.*
+jar/plugin/**.*
+temp/*
+inno/Output/**.*
+.settings/**.*
+**/saves/**
+**/save/**
+**.*~
+starter*
+wrapper*
+jar/libjni/**.*
