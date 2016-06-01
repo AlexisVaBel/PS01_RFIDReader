@@ -61,7 +61,7 @@ public class SerialSimplePrcs extends Thread implements ISerialReader, ISerialWr
 		return m_lst;
 	}
 	
-	@Override
+	
 	public void clearBuffer() {
 		m_lstPrev=new ArrayList<>(m_lst);
 		m_lst.clear();
@@ -112,6 +112,12 @@ public class SerialSimplePrcs extends Thread implements ISerialReader, ISerialWr
 	@Override
 	public void setTimeOut(int iTimeOut) {
 		m_iTimeOut=iTimeOut;		
+	}
+
+	@Override
+	public String getReaded() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

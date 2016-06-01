@@ -3,10 +3,11 @@ package abelx.api.serial;
 import java.util.List;
 
 public interface ISerialReader {
-	void	setReadCnt(int iCnt);
-	boolean readData(byte[] inData);
 	void	setTimeOut(int iTimeOut);
+	void	setReadCnt(int iCnt);
+	
+	boolean readData(byte[] inData);	
 	List<Integer> getReadedBuffer();
-	void	clearBuffer();
+	String	getReaded();
 	boolean allRead();
 }

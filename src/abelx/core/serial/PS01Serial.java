@@ -7,6 +7,8 @@ import abelx.api.serial.ISerialReader;
 
 
 public class PS01Serial extends Thread implements ISerialReader{
+	
+	private String m_strOut="";
 	private static int MAX_LNG=9;
 	private static int FST_CMD=0x23;
 	List<Integer> m_lst=null;
@@ -31,14 +33,13 @@ public class PS01Serial extends Thread implements ISerialReader{
 	
 	@Override
 	public void setReadCnt(int iCnt) {
-		// here is a stub
-//		m_iRcd=iCnt;		
+		// here is a stub	
 	}
 
 	@Override
 	public boolean readData(byte[] inData) {
 		Byte data=inData[0];		
-		if((m_lst.size()<m_iRcd)){
+		if((m_lst.size()<=m_iRcd)){
 			m_bPcsd=false;
 			m_lst.add(new Integer(data.intValue()&0xFF));			
 		}else{
@@ -65,7 +66,7 @@ public class PS01Serial extends Thread implements ISerialReader{
 		return m_lst;
 	}
 
-	@Override
+	
 	public void clearBuffer() {
 		m_lstPrev=new ArrayList<>(m_lst);
 		m_lst.clear();
@@ -100,14 +101,32 @@ public class PS01Serial extends Thread implements ISerialReader{
 	private void procsPacket(){
 		if(m_lstPrev.size()<MAX_LNG){
 			System.out.println("NONE DATA");
+			m_strOut="NONE DATA";
 			return;
 		}
-		if(m_lstPrev.get(1).intValue()==0x50)System.out.println("Turned on power");
-		if(m_lstPrev.get(1).intValue()==0x53)System.out.println("Autotest made");
-		if(m_lstPrev.get(1).intValue()==0x43){
-			String str=String.format("#%d%d%d%d",m_lstPrev.get(3).intValue(),m_lstPrev.get(4).intValue(),m_lstPrev.get(5).intValue(),m_lstPrev.get(6).intValue(),m_lstPrev.get(7).intValue());
-			System.out.println("Card code "+str);			
+		if(m_lstPrev.get(1).intValue()==0x50){
+			m_strOut="Turned on power";
+			System.out.println("Turned on power");
 		}
+		if(m_lstPrev.get(1).intValue()==0x53){
+			m_strOut="Autotest made";
+			System.out.println("Autotest made");
+		}
+		if(m_lstPrev.get(1).intValue()==0x43){
+			String outStr="";
+//			outStr=Integer.toHexString(m_lstPrev.get(3))+"_";			
+			outStr+=String.format("%02x", (m_lstPrev.get(4)));
+			outStr+=String.format("%02x", (m_lstPrev.get(5)));
+			outStr+=String.format("%02x", (m_lstPrev.get(6)));			
+			outStr+=String.format("%02x", (m_lstPrev.get(7)));			
+			m_strOut=outStr;
+			System.out.println("Card code "+Integer.parseInt(outStr, 16));			
+		}
+	}
+
+	@Override
+	public String getReaded() {
+		return m_strOut;
 	}
 	
 }
